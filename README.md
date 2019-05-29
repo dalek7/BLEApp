@@ -7,3 +7,6 @@
 
 #### MacOS
 * BlueSee
+
+### TODO
+* Developing the desktop app.
