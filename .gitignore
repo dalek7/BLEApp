@@ -1,6 +1,14 @@
 # Prerequisites
 *.d
 
+
+# seung
+*.bak
+*.swp
+.*
+
+
+
 # Compiled Object files
 *.slo
 *.lo
