@@ -7,6 +7,7 @@
 *.swp
 .*
 
+.idea/
 
 
 # Compiled Object files
