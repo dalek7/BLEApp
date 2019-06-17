@@ -8,7 +8,7 @@
 #### MacOS
 * BlueSee
 
-<img src='SW/screenshot01__macosx.png' width =500px />
+<img src='SW/screenshot01__macosx.png' width =800px />
 
 ### TODO
 * Developing the desktop app.
