@@ -1,6 +1,7 @@
 import asyncio
 from bleak import discover
 # See https://pypi.org/project/bleak/
+
 async def run():
     devices = await discover()
     for d in devices:
