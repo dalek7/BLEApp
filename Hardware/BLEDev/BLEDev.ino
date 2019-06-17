@@ -15,14 +15,14 @@ void loop() {
     char c1 = BTSerial.read();
     Serial.write(c1);
 
-      if (c1=='1')
+      if (c1=='1') // 0x31
       {
         Serial.println("On");
         BTSerial.print('1');
         digitalWrite(LED_BUILTIN, HIGH);
         cnt = 0;
       }
-      else if (c1=='0')
+      else if (c1=='0') // 0x30
       {
         Serial.println("Off");
         BTSerial.print('0');
