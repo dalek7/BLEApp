@@ -1,3 +1,4 @@
+```
 0 0x4C 16 len: 5 RSSI -84 APPLE
 0 0x75 66 len: 4 RSSI -81 SAMSUNG
 0 0x4C 16 len: 5 RSSI -84 APPLE
@@ -706,3 +707,5 @@
 0 0x75 66 len: 4 RSSI -78 SAMSUNG
 0 0x4C 16 len: 5 RSSI -85 APPLE
 0 0xE0 0 len: 17 RSSI -81 GOOGLE
+```
+
