@@ -1,12 +1,22 @@
 ### Example 1
 ```
+0xE0 0 len: 17 GOOGLE
 0x4C 16 len: 5 APPLE
 0x4C 16 len: 5 APPLE
+0x4C 16 len: 5 APPLE
+0xE0 0 len: 17 GOOGLE
 0x4C 16 len: 5 APPLE
 0x75 66 len: 4 SAMSUNG
+0xE0 0 len: 17 GOOGLE
 0x4C 16 len: 5 APPLE
+0x157 200 len: 15
+0xE0 0 len: 17 GOOGLE
+0x75 66 len: 4 SAMSUNG
+0xE0 0 len: 17 GOOGLE
 0x75 66 len: 4 SAMSUNG
 0x157 200 len: 15
+0xE0 0 len: 17 GOOGLE
 0x4C 16 len: 5 APPLE
+0x75 66 len: 4 SAMSUNG
 ```
 

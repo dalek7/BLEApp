@@ -64,6 +64,7 @@ namespace HelloUWP
             //this.watcher.AdvertisementFilter.Advertisem.ManufacturerData.Add(manufacturerData);
 
             watcher.Received += _watcher_Received;
+            watcher.ScanningMode = BluetoothLEScanningMode.Active;
             watcher.Start();
         }
 
@@ -98,6 +99,8 @@ namespace HelloUWP
                             buf += " APPLE";
                         else if (md.CompanyId == 0x75) // Samsung
                             buf += " SAMSUNG";
+                        else if (md.CompanyId == 0xE0)
+                            buf += " GOOGLE";
 
                         Debug.WriteLine(buf);
                     }
@@ -106,6 +109,7 @@ namespace HelloUWP
 
             //https://www.bluetooth.com/specifications/assigned-numbers/company-identifiers/
             //76	0x004C	Apple, Inc.
+            //224	0x00E0	Google
             //117	0x0075	Samsung Electronics Co. Ltd.
             //343	0x0157	Anhui Huami Information Technology Co., Ltd.
         }
