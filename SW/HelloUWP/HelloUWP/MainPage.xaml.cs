@@ -81,11 +81,15 @@ namespace HelloUWP
 
         private void _watcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
+            
             if (args != null && args.Advertisement != null)
             {
                 //Debug.WriteLine("device found");
                 if (args.Advertisement.ManufacturerData != null)
                 {
+                    int n = 0;
+
+                    Int16 rssi = args.RawSignalStrengthInDBm;
                     foreach (BluetoothLEManufacturerData md in args.Advertisement.ManufacturerData)
                     {
                         DataReader reader = DataReader.FromBuffer(md.Data);
@@ -96,7 +100,7 @@ namespace HelloUWP
                         //if (md.Data.Length < 1)    continue;
                         //short b = reader.ReadInt16(); //error -_-
                         mCompanyIDs.Add(md.CompanyId);
-                        String buf = String.Format("0x{0:X} {1:d} len: {2}", md.CompanyId, advertismentType, len);
+                        String buf = String.Format("{0} 0x{1:X} {2:d} len: {3} RSSI {4}", n, md.CompanyId, advertismentType, len, rssi);
 
                         if (md.CompanyId == 0x4C) // Appl
                             buf += " APPLE";
@@ -106,6 +110,7 @@ namespace HelloUWP
                             buf += " GOOGLE";
 
                         Debug.WriteLine(buf);
+                        n++;
                     }
                 }
             }
