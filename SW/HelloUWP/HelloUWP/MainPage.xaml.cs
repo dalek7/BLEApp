@@ -125,24 +125,9 @@ namespace HelloUWP
             mCompanyIDs.Clear();
             textBox1.Text = buf;
             Debug.WriteLine(buf);
-
-            
-
-        }
-       
-
-
-        async void Hello(String buf)
-        {
-            MediaElement mediaElement = new MediaElement();
-
-            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
-            Windows.Media.SpeechSynthesis.SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(buf);
-            mediaElement.SetSource(stream, stream.ContentType);
-            mediaElement.Play();
+            Debug.WriteLine("Cleaned the buffer");
+            Debug.WriteLine("=========================");
 
         }
-
-
     }
 }
