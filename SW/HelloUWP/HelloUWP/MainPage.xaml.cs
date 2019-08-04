@@ -64,6 +64,9 @@ namespace HelloUWP
             //this.watcher.AdvertisementFilter.Advertisem.ManufacturerData.Add(manufacturerData);
 
             watcher.Received += _watcher_Received;
+
+            //To receive scan response advertisements as well, set the following after creating the watcher. Note that this will cause greater power drain and is not available while in background modes.
+            //https://docs.microsoft.com/en-us/windows/uwp/devices-sensors/ble-beacon
             watcher.ScanningMode = BluetoothLEScanningMode.Active;
             watcher.Start();
         }
