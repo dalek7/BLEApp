@@ -20,10 +20,7 @@ using Windows.Devices.Enumeration;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 using Windows.Devices.Bluetooth.Advertisement;
-
-
 using Windows.Storage.Streams;
-
 
 namespace HelloUWP
 {
@@ -31,7 +28,6 @@ namespace HelloUWP
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     /// 
-   
     public sealed partial class MainPage : Page
     {
 
@@ -68,6 +64,18 @@ namespace HelloUWP
             //To receive scan response advertisements as well, set the following after creating the watcher. Note that this will cause greater power drain and is not available while in background modes.
             //https://docs.microsoft.com/en-us/windows/uwp/devices-sensors/ble-beacon
             watcher.ScanningMode = BluetoothLEScanningMode.Active;
+            //watcher.SignalStrengthFilter.InRangeThresholdInDBm = -70;
+            // Set the out-of-range threshold to -75dBm (give some buffer). Used in conjunction 
+            // with OutOfRangeTimeout to determine when an advertisement is no longer 
+            // considered "in-range".
+            //watcher.SignalStrengthFilter.OutOfRangeThresholdInDBm = -75;
+
+            // Set the out-of-range timeout to be 2 seconds. Used in conjunction with 
+            // OutOfRangeThresholdInDBm to determine when an advertisement is no longer 
+            // considered "in-range"
+            //watcher.SignalStrengthFilter.OutOfRangeTimeout = TimeSpan.FromMilliseconds(2000);
+
+
             watcher.Start();
         }
 
@@ -121,8 +129,6 @@ namespace HelloUWP
             //117	0x0075	Samsung Electronics Co. Ltd.
             //343	0x0157	Anhui Huami Information Technology Co., Ltd.
         }
-
-
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
