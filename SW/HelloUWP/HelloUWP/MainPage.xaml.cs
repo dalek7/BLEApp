@@ -77,12 +77,9 @@ namespace HelloUWP
 
         private void _watcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
-
             if (args != null && args.Advertisement != null)
             {
-
                 //Debug.WriteLine("device found");
-
                 if (args.Advertisement.ManufacturerData != null)
                 {
                     foreach (BluetoothLEManufacturerData md in args.Advertisement.ManufacturerData)
@@ -96,66 +93,21 @@ namespace HelloUWP
                         //short b = reader.ReadInt16(); //error -_-
                         mCompanyIDs.Add(md.CompanyId);
                         String buf = String.Format("0x{0:X} {1:d} len: {2}", md.CompanyId, advertismentType, len);
+
+                        if (md.CompanyId == 0x4C) // Appl
+                            buf += " APPLE";
+                        else if (md.CompanyId == 0x75) // Samsung
+                            buf += " SAMSUNG";
+
                         Debug.WriteLine(buf);
-
                     }
-
-
                 }
-                //Debug.WriteLine("manufacture data found");
-
             }
 
             //https://www.bluetooth.com/specifications/assigned-numbers/company-identifiers/
             //76	0x004C	Apple, Inc.
             //117	0x0075	Samsung Electronics Co. Ltd.
             //343	0x0157	Anhui Huami Information Technology Co., Ltd.
-
-            return;
-            var uuids = args.Advertisement.ServiceUuids;
-            foreach (var uuid  in uuids)
-            {
-                string uuidString = uuid.ToString();
-                Debug.WriteLine(uuidString);
-            }
-
-            if(false)
-            foreach (BluetoothLEManufacturerData md in args.Advertisement.ManufacturerData)
-            {
-                DataReader reader = DataReader.FromBuffer(md.Data);
-                byte advertismentType = reader.ReadByte();
-                byte len = reader.ReadByte();
-                int a = reader.ReadInt32();
-                
-                //if (md.Data.Length < 1)    continue;
-                //short b = reader.ReadInt16(); //error
-                mCompanyIDs.Add(md.CompanyId);
-                String buf = String.Format("0x{0:X} {1:d} {2}", md.CompanyId, advertismentType, len);
-                Debug.WriteLine(buf);
-
-                /*
-                if (md.CompanyId == 0x4C) // Apple
-                {
-                    DataReader reader = DataReader.FromBuffer(md.Data);
-                    byte advertismentType1 = reader.ReadByte(); // 0x02 - iBeacon
-                    byte len = reader.ReadByte(); // 0x15 (21) - iBeacon
-                    int a = reader.ReadInt32();
-                    short b = reader.ReadInt16();
-                    short c = reader.ReadInt16();
-                    byte[] d = new byte[8];
-                    reader.ReadBytes(d);
-                    Guid uuid = new Guid(a, b, c, d);
-                    ushort major = reader.ReadUInt16();
-                    ushort minor = reader.ReadUInt16();
-                    Debug.WriteLine(uuid + " " + major + " " + minor + " " + args.RawSignalStrengthInDBm);
-                }
-                */
-                continue;
-
-            }
-
-           
-
         }
 
 
