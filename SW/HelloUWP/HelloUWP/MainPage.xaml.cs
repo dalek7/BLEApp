@@ -21,6 +21,8 @@ using Windows.Devices.Enumeration;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage.Streams;
+using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
 namespace HelloUWP
 {
@@ -93,24 +95,38 @@ namespace HelloUWP
             foreach (var uuidone in bleServiceUUIDs)
             {
                 Debug.WriteLine(uuidone);
-                //if (uuidone == new Guid("00001800-0000-1000-8000-00805f9b34fb")) //generic access
-
+                //
                 if (uuidone == new Guid("0000fe9a-0000-1000-8000-00805f9b34fb")) //generic attribute
                 {
                     Debug.WriteLine("Custom UUID of Estimote");
+                    BluetoothLEDevice dev = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+                    //GattDeviceService service = dev.GetGattService(new Guid("00001809-0000-1000-8000-00805f9b34fb"));
+                    Debug.WriteLine("-------------------------------------");
+
                 }
-                if (uuidone == new Guid("00001801-0000-1000-8000-00805f9b34fb")) //generic attribute
+                else if (uuidone == new Guid("00001800-0000-1000-8000-00805f9b34fb")) //generic access
+                {
+                    Debug.WriteLine("generic access");
+                    Debug.WriteLine("-------------------------------------");
+                }
+                else if (uuidone == new Guid("00001801-0000-1000-8000-00805f9b34fb")) //generic attribute
                 //https://gist.github.com/sam016/4abe921b5a9ee27f67b3686910293026
                 {
-                  
                     this.watcher.Stop();
-                    Debug.WriteLine("aa");
+                    Debug.WriteLine("generic attribute");
+                    Debug.WriteLine("-------------------------------------");
                     //BluetoothLEDevice dev = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
                     //GattDeviceService service = dev.GetGattService(new Guid("00001809-0000-1000-8000-00805f9b34fb"));
 
                     // service
 
-                    break;
+                    
+                }
+                //https://learn.adafruit.com/introducing-adafruit-ble-bluetooth-low-energy-friend/uart-service
+                else if (uuidone == new Guid("6e400001-b5a3-f393-e0a9-e50e24dcca9e"))
+                {
+                    Debug.WriteLine("UART Service. his service simulates a basic UART connection over two lines, TXD and RXD.");
+                    Debug.WriteLine("-------------------------------------");
                 }
             }
         }
