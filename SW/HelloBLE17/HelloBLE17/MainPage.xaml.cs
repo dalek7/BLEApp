@@ -37,6 +37,7 @@ namespace HelloBLE17
         Guid MyService_GUID;
         Guid MYCharacteristic_GUID;
         GattDeviceService service = null;
+        GattCharacteristic charac = null;
 
         Stopwatch stopwatch;
         long deviceFoundMilis = 0, serviceFoundMilis = 0;
@@ -48,7 +49,6 @@ namespace HelloBLE17
             this.InitializeComponent();
             MyService_GUID = new Guid("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
             MYCharacteristic_GUID = new Guid("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
-
 
             stopwatch = new Stopwatch();
         }
@@ -122,13 +122,65 @@ namespace HelloBLE17
                     connectedMilis = stopwatch.ElapsedMilliseconds;
                     Debug.WriteLine("Connected in " + (connectedMilis - deviceFoundMilis) + " ms");
                     var services = result.Services;
-                    service = services[0];
+
+                    if (services.Count > 0)
+                        service = services[0];
+                    
+
                     if (service != null)
                     {
                         serviceFoundMilis = stopwatch.ElapsedMilliseconds;
                         Debug.WriteLine("Service found in " +
                            (serviceFoundMilis - connectedMilis) + " ms");
 
+                        var charResult = await service.GetCharacteristicsForUuidAsync(MYCharacteristic_GUID);
+
+                        if (charResult.Status == GattCommunicationStatus.Success)
+                        {
+                            
+                            charac = charResult.Characteristics[0];
+
+                            if (charac != null)
+                            {
+                                characteristicFoundMilis = stopwatch.ElapsedMilliseconds;
+                                Debug.WriteLine("Characteristic found in " +
+                                               (characteristicFoundMilis - serviceFoundMilis) + " ms");
+
+                                var descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.None;
+                                GattCharacteristicProperties properties = charac.CharacteristicProperties;
+                                string descriptor = string.Empty;
+
+                                if (properties.HasFlag(GattCharacteristicProperties.Read))
+                                {
+                                    Debug.WriteLine("This characteristic supports reading .");
+                                }
+                                if (properties.HasFlag(GattCharacteristicProperties.Write))
+                                {
+                                    Debug.WriteLine("This characteristic supports writing .");
+                                }
+                                if (properties.HasFlag(GattCharacteristicProperties.WriteWithoutResponse))
+                                {
+                                    Debug.WriteLine("This characteristic supports writing  whithout responce.");
+                                }
+
+
+                                if (properties.HasFlag(GattCharacteristicProperties.Notify)) // this case !
+                                {
+                                    descriptor = "notifications";
+                                    descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.Notify;
+                                    Debug.WriteLine("This characteristic supports subscribing to notifications.");
+                                }
+                                if (properties.HasFlag(GattCharacteristicProperties.Indicate))
+                                {
+                                    descriptor = "indications";
+                                    descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.Indicate;
+                                    Debug.WriteLine("This characteristic supports subscribing to Indication");
+                                }
+
+                                Debug.WriteLine("---------------------------");
+                            }
+
+                        }
 
                     }
 
