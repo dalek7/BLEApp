@@ -59,7 +59,7 @@ namespace HelloUWP
 
             //this.watcher.AdvertisementFilter.Advertisem.ManufacturerData.Add(manufacturerData);
 
-            watcher.Received += _watcher_Received;
+            watcher.Received += _watcher_Received2;
 
             //To receive scan response advertisements as well, set the following after creating the watcher. Note that this will cause greater power drain and is not available while in background modes.
             //https://docs.microsoft.com/en-us/windows/uwp/devices-sensors/ble-beacon
@@ -86,6 +86,34 @@ namespace HelloUWP
             watcher.Stop();
         }
 
+        private async void _watcher_Received2(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
+        {
+            // アドバタイズパケット受信→Health Thermometerサービスを検索
+            var bleServiceUUIDs = args.Advertisement.ServiceUuids;
+            foreach (var uuidone in bleServiceUUIDs)
+            {
+                Debug.WriteLine(uuidone);
+                //if (uuidone == new Guid("00001800-0000-1000-8000-00805f9b34fb")) //generic access
+
+                if (uuidone == new Guid("0000fe9a-0000-1000-8000-00805f9b34fb")) //generic attribute
+                {
+                    Debug.WriteLine("Custom UUID of Estimote");
+                }
+                if (uuidone == new Guid("00001801-0000-1000-8000-00805f9b34fb")) //generic attribute
+                //https://gist.github.com/sam016/4abe921b5a9ee27f67b3686910293026
+                {
+                  
+                    this.watcher.Stop();
+                    Debug.WriteLine("aa");
+                    //BluetoothLEDevice dev = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+                    //GattDeviceService service = dev.GetGattService(new Guid("00001809-0000-1000-8000-00805f9b34fb"));
+
+                    // service
+
+                    break;
+                }
+            }
+        }
 
         private void _watcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
