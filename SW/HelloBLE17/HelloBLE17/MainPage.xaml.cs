@@ -186,12 +186,24 @@ namespace HelloBLE17
 
                 }
 
-                    //Debug.WriteLine("Advertisement type = " + advertisementType);
+
+                //Debug.WriteLine("Advertisement type = " + advertisementType);
 
 
-             }
+            }
         }
 
 
     }
 }
+/*
+---------------------------
+Characteristic found in 53 ms
+This characteristic supports subscribing to notifications.
+---------------------------
+Characteristic found in 78 ms
+This characteristic supports subscribing to notifications.
+---------------------------
+Characteristic found in 29 ms
+This characteristic supports subscribing to notifications.
+*/
