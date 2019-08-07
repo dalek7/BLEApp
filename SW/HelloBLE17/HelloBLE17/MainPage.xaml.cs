@@ -33,7 +33,7 @@ namespace HelloBLE17
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<string> ConnectedDevices;
+        //List<string> ConnectedDevices;
         BluetoothLEAdvertisementWatcher watcher;
         //DeviceWatcher deviceWatcher;
         Guid MyService_GUID;
@@ -45,7 +45,8 @@ namespace HelloBLE17
         long deviceFoundMilis = 0, serviceFoundMilis = 0;
         long connectedMilis = 0, characteristicFoundMilis = 0;
         long WriteDescriptorMilis = 0;
-
+        long lastRXMillis = 0, curRXMillis = 0;
+        bool bFoundDev = false;
         public MainPage()
         {
             this.InitializeComponent();
@@ -94,20 +95,25 @@ namespace HelloBLE17
         }
         private async void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
         {
-            
+            if (eventArgs.Advertisement.LocalName.Trim() == "")
+            {
+                //Debug.WriteLine("Something wrong");
+                return;
+            }
             var address = eventArgs.BluetoothAddress;
-            //Int16 rssi = eventArgs.RawSignalStrengthInDBm;
             
+            //Int16 rssi = eventArgs.RawSignalStrengthInDBm;
+
             //if (address.Equals(== "219300284384772")
             //Debug.WriteLine(rssi + " " + buf + " " + address + " " + localName);
             // -56 C773D38CC604 219300284384772
 
-
             BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(address);
-            if (device != null)
+            if (device != null && !bFoundDev)
             {
                 deviceFoundMilis = stopwatch.ElapsedMilliseconds;
                 Debug.WriteLine("Device found in " + deviceFoundMilis + " ms");
+                bFoundDev = true;
 
                 Int16 rssi = eventArgs.RawSignalStrengthInDBm;
                 //Debug.WriteLine("Signalstrengt = " + rssi + " DBm");
@@ -170,6 +176,8 @@ namespace HelloBLE17
                                     descriptor = "notifications";
                                     descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.Notify;
                                     Debug.WriteLine("This characteristic supports subscribing to notifications.");
+                                    
+
                                 }
                                 if (properties.HasFlag(GattCharacteristicProperties.Indicate))
                                 {
@@ -179,14 +187,15 @@ namespace HelloBLE17
                                 }
                                 try
                                 {
+
                                     var descriptorWriteResult = await charac.WriteClientCharacteristicConfigurationDescriptorAsync(descriptorValue);
                                     if (descriptorWriteResult == GattCommunicationStatus.Success)
                                     {
 
                                         WriteDescriptorMilis = stopwatch.ElapsedMilliseconds;
                                         Debug.WriteLine("Successfully registered for " + descriptor + " in " +
-                                                       (WriteDescriptorMilis - characteristicFoundMilis) + " ms");
-                                        charac.ValueChanged += Charac_ValueChanged; ;
+                                                        (WriteDescriptorMilis - characteristicFoundMilis) + " ms");
+                                        charac.ValueChanged += Charac_ValueChanged;
                                     }
                                     else
                                     {
@@ -195,6 +204,7 @@ namespace HelloBLE17
                                         device = null;
                                         watcher.Start();//Start watcher again for retry
                                     }
+
                                 }
                                 catch (UnauthorizedAccessException ex)
                                 {
@@ -202,6 +212,7 @@ namespace HelloBLE17
                                 }
                                 Debug.WriteLine("---------------------------");
                             }
+
                             else Debug.WriteLine("No characteristics  found");
 
                         }
@@ -214,8 +225,6 @@ namespace HelloBLE17
 
 
                 //Debug.WriteLine("Advertisement type = " + advertisementType);
-
-
             }
         }
 
@@ -223,12 +232,16 @@ namespace HelloBLE17
         private static void Charac_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             CryptographicBuffer.CopyToByteArray(args.CharacteristicValue, out byte[] data);
+            
             string dataFromNotify;
             try
             {
                 //Asuming Encoding is in ASCII, can be UTF8 or other!
                 dataFromNotify = Encoding.ASCII.GetString(data);
-                Debug.Write(dataFromNotify);
+                byte[] bufb = Encoding.ASCII.GetBytes(dataFromNotify);
+                char[] bufc = System.Text.Encoding.UTF8.GetString(bufb).ToCharArray(); 
+                String buf = String.Format("{0:X}", bufb[0]);
+                Debug.WriteLine(sender.Uuid + " " + buf);//dataFromNotify
             }
             catch (ArgumentException)
             {
