@@ -6,7 +6,7 @@
 * Bluetooth LE Explorer
 * HelloBLE17 : See SW/HelloBLE17 (개발 진행중, Under development)
 
-<img src='SW/HelloBLE17/screenshot_01.png' width-'600px'/>
+<img src='SW/HelloBLE17/screenshot_01.png' width='600px'/>
 
 #### MacOS
 * BlueSee
