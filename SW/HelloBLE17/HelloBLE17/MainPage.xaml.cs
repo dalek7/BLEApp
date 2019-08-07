@@ -23,6 +23,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+
 // 빈 페이지 항목 템플릿에 대한 설명은 https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x412에 나와 있습니다.
 
 // https://docs.microsoft.com/ko-kr/windows/uwp/devices-sensors/ble-beacon
@@ -60,7 +61,7 @@ namespace HelloBLE17
        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            textBox1.Text = "Hello!";
             Debug.WriteLine("Hello");
             Debug.WriteLine("=====================================================");
             //watcher = new BluetoothLEAdvertisementWatcher();
@@ -229,7 +230,7 @@ namespace HelloBLE17
         }
 
 
-        private static void Charac_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        private async void Charac_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             CryptographicBuffer.CopyToByteArray(args.CharacteristicValue, out byte[] data);
             
@@ -242,6 +243,14 @@ namespace HelloBLE17
                 char[] bufc = System.Text.Encoding.UTF8.GetString(bufb).ToCharArray(); 
                 String buf = String.Format("{0:X}", bufb[0]);
                 Debug.WriteLine(sender.Uuid + " " + buf);//dataFromNotify
+
+                //https://stackoverflow.com/a/38150056
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                    //UI code here
+                    textBox1.Text = buf;
+                });
+
+            
             }
             catch (ArgumentException)
             {
@@ -249,6 +258,7 @@ namespace HelloBLE17
             }
 
         }
+
     }
 }
 /*

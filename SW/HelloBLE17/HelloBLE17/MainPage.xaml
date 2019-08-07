@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="125,93,0,0" Text="TextBox1" VerticalAlignment="Top"/>
+        <TextBox Name="textBox1" HorizontalAlignment="Left" Margin="125,93,0,0" Text="-" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>
