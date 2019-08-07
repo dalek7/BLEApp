@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
@@ -11,6 +12,7 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Cryptography;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -175,7 +177,29 @@ namespace HelloBLE17
                                     descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.Indicate;
                                     Debug.WriteLine("This characteristic supports subscribing to Indication");
                                 }
+                                try
+                                {
+                                    var descriptorWriteResult = await charac.WriteClientCharacteristicConfigurationDescriptorAsync(descriptorValue);
+                                    if (descriptorWriteResult == GattCommunicationStatus.Success)
+                                    {
 
+                                        WriteDescriptorMilis = stopwatch.ElapsedMilliseconds;
+                                        Debug.WriteLine("Successfully registered for " + descriptor + " in " +
+                                                       (WriteDescriptorMilis - characteristicFoundMilis) + " ms");
+                                        charac.ValueChanged += Charac_ValueChanged; ;
+                                    }
+                                    else
+                                    {
+                                        Debug.WriteLine($"Error registering for " + descriptor + ": {result}");
+                                        device.Dispose();
+                                        device = null;
+                                        watcher.Start();//Start watcher again for retry
+                                    }
+                                }
+                                catch (UnauthorizedAccessException ex)
+                                {
+                                    Debug.WriteLine(ex.Message);
+                                }
                                 Debug.WriteLine("---------------------------");
                             }
                             else Debug.WriteLine("No characteristics  found");
@@ -196,6 +220,22 @@ namespace HelloBLE17
         }
 
 
+        private static void Charac_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            CryptographicBuffer.CopyToByteArray(args.CharacteristicValue, out byte[] data);
+            string dataFromNotify;
+            try
+            {
+                //Asuming Encoding is in ASCII, can be UTF8 or other!
+                dataFromNotify = Encoding.ASCII.GetString(data);
+                Debug.Write(dataFromNotify);
+            }
+            catch (ArgumentException)
+            {
+                Debug.WriteLine("Unknown format");
+            }
+
+        }
     }
 }
 /*
