@@ -147,9 +147,10 @@ namespace HelloBLE17
                                                (characteristicFoundMilis - serviceFoundMilis) + " ms");
 
                                 var descriptorValue = GattClientCharacteristicConfigurationDescriptorValue.None;
-                                GattCharacteristicProperties properties = charac.CharacteristicProperties;
                                 string descriptor = string.Empty;
 
+                                GattCharacteristicProperties properties = charac.CharacteristicProperties;
+                                
                                 if (properties.HasFlag(GattCharacteristicProperties.Read))
                                 {
                                     Debug.WriteLine("This characteristic supports reading .");
@@ -162,8 +163,6 @@ namespace HelloBLE17
                                 {
                                     Debug.WriteLine("This characteristic supports writing  whithout responce.");
                                 }
-
-
                                 if (properties.HasFlag(GattCharacteristicProperties.Notify)) // this case !
                                 {
                                     descriptor = "notifications";
@@ -179,12 +178,15 @@ namespace HelloBLE17
 
                                 Debug.WriteLine("---------------------------");
                             }
+                            else Debug.WriteLine("No characteristics  found");
 
                         }
 
                     }
+                    else Debug.WriteLine("No services found");
 
                 }
+                else Debug.WriteLine("No device found");
 
 
                 //Debug.WriteLine("Advertisement type = " + advertisementType);
@@ -207,3 +209,6 @@ This characteristic supports subscribing to notifications.
 Characteristic found in 29 ms
 This characteristic supports subscribing to notifications.
 */
+
+
+// https://github.com/GrooverFromHolland/SimpleBleExample_by_Devicename/blob/master/SimpleBleExample_by_Devicename/MainPage.xaml.cs
