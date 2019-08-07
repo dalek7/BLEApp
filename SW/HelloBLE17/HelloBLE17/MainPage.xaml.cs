@@ -46,8 +46,10 @@ namespace HelloBLE17
         long deviceFoundMilis = 0, serviceFoundMilis = 0;
         long connectedMilis = 0, characteristicFoundMilis = 0;
         long WriteDescriptorMilis = 0;
-        long lastRXMillis = 0, curRXMillis = 0;
+        long lastRXMillis = 0, curRXMillis, initialRXMillis = 0;
+
         bool bFoundDev = false;
+        long cntData = 0;
         public MainPage()
         {
             this.InitializeComponent();
@@ -237,17 +239,35 @@ namespace HelloBLE17
             string dataFromNotify;
             try
             {
+                if(initialRXMillis==0)
+                    initialRXMillis = stopwatch.ElapsedMilliseconds;
+
+                curRXMillis = stopwatch.ElapsedMilliseconds - initialRXMillis;
+
+                long dt = 0;
+                if (lastRXMillis > 0)
+                    dt = curRXMillis - lastRXMillis;
+
+                String buft;
+
+                if(cntData>100)
+                    buft = String.Format(" {0} {2:0.#} ms {1:0.##} ", cntData, curRXMillis / 1000.0, curRXMillis / (float)cntData);
+                else
+                    buft = String.Format(" {0} {1:0.##}", cntData, curRXMillis / 1000.0 );
+                cntData++;
+                lastRXMillis = curRXMillis;
                 //Asuming Encoding is in ASCII, can be UTF8 or other!
                 dataFromNotify = Encoding.ASCII.GetString(data);
                 byte[] bufb = Encoding.ASCII.GetBytes(dataFromNotify);
                 char[] bufc = System.Text.Encoding.UTF8.GetString(bufb).ToCharArray(); 
                 String buf = String.Format("{0:X}", bufb[0]);
-                Debug.WriteLine(sender.Uuid + " " + buf);//dataFromNotify
+                Debug.WriteLine(curRXMillis + " "  + sender.Uuid + " " + buf);//dataFromNotify
 
                 //https://stackoverflow.com/a/38150056
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
                     //UI code here
                     textBox1.Text = buf;
+                    textBox2.Text = buft;
                 });
 
             
