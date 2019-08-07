@@ -63,7 +63,8 @@ namespace HelloBLE17
        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            textBox1.Text = "Hello!";
+            textBox1.Text = "Hello !";
+            textBlock1.Text = "Hello !";
             Debug.WriteLine("Hello");
             Debug.WriteLine("=====================================================");
             //watcher = new BluetoothLEAdvertisementWatcher();
@@ -118,6 +119,13 @@ namespace HelloBLE17
                 Debug.WriteLine("Device found in " + deviceFoundMilis + " ms");
                 bFoundDev = true;
 
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                    //UI code here
+                    textBlock1.Text = "Device ID : " + device.DeviceId;
+
+                });
+
+                
                 Int16 rssi = eventArgs.RawSignalStrengthInDBm;
                 //Debug.WriteLine("Signalstrengt = " + rssi + " DBm");
                 string localName = eventArgs.Advertisement.LocalName;
@@ -148,11 +156,14 @@ namespace HelloBLE17
 
                         if (charResult.Status == GattCommunicationStatus.Success)
                         {
-                            
                             charac = charResult.Characteristics[0];
 
                             if (charac != null)
                             {
+                                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                                    textBlock2.Text = charac.Uuid.ToString().ToUpper();
+                                });
+                                
                                 characteristicFoundMilis = stopwatch.ElapsedMilliseconds;
                                 Debug.WriteLine("Characteristic found in " +
                                                (characteristicFoundMilis - serviceFoundMilis) + " ms");
