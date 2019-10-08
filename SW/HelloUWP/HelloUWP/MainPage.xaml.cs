@@ -90,7 +90,7 @@ namespace HelloUWP
 
         private async void _watcher_Received2(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
-            // アドバタイズパケット受信→Health Thermometerサービスを検索
+           
             var bleServiceUUIDs = args.Advertisement.ServiceUuids;
             foreach (var uuidone in bleServiceUUIDs)
             {
@@ -126,6 +126,12 @@ namespace HelloUWP
                 else if (uuidone == new Guid("6e400001-b5a3-f393-e0a9-e50e24dcca9e"))
                 {
                     Debug.WriteLine("UART Service. his service simulates a basic UART connection over two lines, TXD and RXD.");
+
+                    BluetoothLEDevice dev = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+
+                    GattDeviceService service = dev.GetGattService(uuidone);
+                    var characteristics = service.GetAllCharacteristics();
+
                     Debug.WriteLine("-------------------------------------");
                 }
             }
