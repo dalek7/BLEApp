@@ -59,8 +59,6 @@ namespace HelloBLE17
             stopwatch = new Stopwatch();
         }
 
-
-       
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             textBox1.Text = "Hello !";

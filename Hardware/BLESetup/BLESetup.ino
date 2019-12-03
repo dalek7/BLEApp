@@ -1,6 +1,11 @@
 #include <SoftwareSerial.h>
+#define GENIE
 
+#ifdef GENIE
+SoftwareSerial BTSerial(5, 4); 
+#else
 SoftwareSerial BTSerial(4, 5); 
+#endif 
 
 void setup()
 {
@@ -12,11 +17,9 @@ void setup()
 
 void loop()
 {
-  
   if (BTSerial.available()) {
     Serial.write(BTSerial.read());
   }
-  
   
   if (Serial.available()) {
     BTSerial.write(Serial.read());
