@@ -18,8 +18,21 @@
 * A custom UART service
 ```
 6E400001-B5A3-F393-E0A9-E50E24DCCA9E for the Service
-6E400002-B5A3-F393-E0A9-E50E24DCCA9E for the TX Characteristic (Property = Notify)
-6E400003-B5A3-F393-E0A9-E50E24DCCA9E for the RX Characteristic (Property = Write without response)
+6E400002-B5A3-F393-E0A9-E50E24DCCA9E for the RX Characteristic (Property = Notify)
+6E400003-B5A3-F393-E0A9-E50E24DCCA9E for the TX Characteristic (Property = Write without response)
+```
+
+* In a class named UARTManager <a href='https://github.com/NordicSemiconductor/Android-nRF-Toolbox' target='_blank'>Android-nRF-Toolbox </a>
+```
+public class UARTManager extends LoggableBleManager<UARTManagerCallbacks> 
+...
+/** Nordic UART Service UUID */
+private final static UUID UART_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+/** RX characteristic UUID */
+private final static UUID UART_RX_CHARACTERISTIC_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
+/** TX characteristic UUID */
+private final static UUID UART_TX_CHARACTERISTIC_UUID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
+...
 ```
 
 <img src='image/Properties.png' />
